@@ -1,6 +1,6 @@
 #include "config.h"
 #include "Debug.h"
-#include "gl/glew.h"
+#include "GL/glew.h"
 #include "core/math/mat4.h"
 
 namespace Debug

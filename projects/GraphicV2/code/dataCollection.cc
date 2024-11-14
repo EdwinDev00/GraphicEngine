@@ -3,7 +3,7 @@
 #include "vertexBufferLayout.h"
 
 #include "material.h"
-#include "gl/glew.h"
+#include "GL/glew.h"
 
 std::vector<Vertex> GLTFData::ConstructMeshData()
 {
