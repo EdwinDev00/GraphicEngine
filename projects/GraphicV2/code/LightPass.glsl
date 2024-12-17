@@ -66,8 +66,10 @@ vec3 CalcPointLight(PointLight light, vec3 norm, vec3 crntPos, vec3 viewDir, vec
 	vec3 lightDir = normalize(light.position - crntPos); 
 	float distance = length(light.position - crntPos);
 
-	if(distance > light.radius)
-		discard;
+	float fade = 1.0 - smoothstep(light.radius * 0.8, light.radius, distance);
+
+	if(fade <= 0.0)
+		return vec3(0,0,0);
 
 	//Diffuse
 	float diffuseCoefficient = max(dot(lightDir,norm), 0.0f);
@@ -81,7 +83,12 @@ vec3 CalcPointLight(PointLight light, vec3 norm, vec3 crntPos, vec3 viewDir, vec
 	vec3 diffuse = ((diffuseCoefficient) * light.color);
 	vec3 specular = ((specularAmount * albedoSpecular.a) * light.color);
 	
-	float attenuation = 1.0f / (light.constant +  light.linear * distance + light.quadratic * distance * distance);
 	
-	return (diffuse + specular)  * attenuation * albedoSpecular.rgb * light.intensity;
+	// Smooth attenuation
+    float distanceFactor = distance / light.radius;
+    float attenuation = clamp(1.0 - distanceFactor * distanceFactor, 0.0, 1.0);
+    attenuation *= attenuation; // Quadratic falloff for light
+	//float attenuation = 1.0f / (light.constant +  light.linear * distance + light.quadratic * distance * distance);
+
+	return (diffuse + specular)  * attenuation * fade * albedoSpecular.rgb * light.intensity;
 }

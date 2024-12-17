@@ -2,7 +2,7 @@
 #include "inputHandler.h"
 
 #include "imgui.h"
-#include "gl/glew.h"
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
 #include "camera.h"
